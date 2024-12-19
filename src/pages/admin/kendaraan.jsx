@@ -210,8 +210,7 @@ const KendaraanPage = () => {
           <h2 className="text-xl font-bold mb-4">
             {formInput.id_kendaraan > 0 ? "Edit" : "Tambah"} Kendaraan
           </h2>
-          <form>
-            {formInput.id_kendaraan}
+          <form>            
             <TextField
               label="Nomor Polisi"
               name="no_kendaraan"

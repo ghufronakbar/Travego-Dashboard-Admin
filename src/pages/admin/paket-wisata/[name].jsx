@@ -52,17 +52,10 @@ const DetailPaketWisataPage = () => {
   // Fetch data dropdown
   const fetchDropdownData = async () => {
     try {
-      const [rmResponse, hotelResponse, kendaraanResponse, wisataResponse] =
-        await Promise.all([
-          axiosInstance.get("/getRumahMakan"),
-          axiosInstance.get("/getHotel"),
-          axiosInstance.get("/getKendaraan"),
-          axiosInstance.get("/getWisata"),
-        ]);
+      const [wisataResponse] = await Promise.all([
+        axiosInstance.get("/getWisata"),
+      ]);
 
-      setRumahMakanList(rmResponse.data);
-      setHotelList(hotelResponse.data);
-      setKendaraanList(kendaraanResponse.data);
       setWisataList(wisataResponse.data);
     } catch (error) {
       console.log("Error fetching dropdown data:", error);
@@ -107,23 +100,11 @@ const DetailPaketWisataPage = () => {
       valid = false;
       newErrors.harga = "Harga harus lebih dari 0";
     }
-    if (!formInput.id_rm) {
-      valid = false;
-      newErrors.id_rm = "Pilih rumah makan";
-    }
-    if (!formInput.id_hotel) {
-      valid = false;
-      newErrors.id_hotel = "Pilih hotel";
-    }
-    if (!formInput.id_kendaraan) {
-      valid = false;
-      newErrors.id_kendaraan = "Pilih kendaraan";
-    }
     if (!formInput.id_wisata) {
       valid = false;
       newErrors.id_wisata = "Pilih wisata";
     }
-
+    console.log({ newErrors });
     setErrors(newErrors);
     return valid;
   };
@@ -245,67 +226,6 @@ const DetailPaketWisataPage = () => {
             error={!!errors.harga}
             helperText={errors.harga}
           />
-
-          {/* Dropdown Rumah Makan */}
-          <FormControl fullWidth margin="normal" error={!!errors.id_rm}>
-            <InputLabel id="select-rm-label">Rumah Makan</InputLabel>
-            <Select
-              labelId="select-rm-label"
-              name="id_rm"
-              value={formInput.id_rm}
-              onChange={handleChange}
-            >
-              {rumahMakanList.map((rm) => (
-                <MenuItem key={rm.id_rm} value={rm.id_rm}>
-                  {rm.nama_rm}
-                </MenuItem>
-              ))}
-            </Select>
-            {errors.id_rm && <FormHelperText>{errors.id_rm}</FormHelperText>}
-          </FormControl>
-
-          {/* Dropdown Hotel */}
-          <FormControl fullWidth margin="normal" error={!!errors.id_hotel}>
-            <InputLabel id="select-hotel-label">Hotel</InputLabel>
-            <Select
-              labelId="select-hotel-label"
-              name="id_hotel"
-              value={formInput.id_hotel}
-              onChange={handleChange}
-            >
-              {hotelList.map((hotel) => (
-                <MenuItem key={hotel.id_hotel} value={hotel.id_hotel}>
-                  {hotel.nama_hotel}
-                </MenuItem>
-              ))}
-            </Select>
-            {errors.id_hotel && (
-              <FormHelperText>{errors.id_hotel}</FormHelperText>
-            )}
-          </FormControl>
-
-          {/* Dropdown Kendaraan */}
-          <FormControl fullWidth margin="normal" error={!!errors.id_kendaraan}>
-            <InputLabel id="select-kendaraan-label">Kendaraan</InputLabel>
-            <Select
-              labelId="select-kendaraan-label"
-              name="id_kendaraan"
-              value={formInput.id_kendaraan}
-              onChange={handleChange}
-            >
-              {kendaraanList.map((kendaraan) => (
-                <MenuItem
-                  key={kendaraan.id_kendaraan}
-                  value={kendaraan.id_kendaraan}
-                >
-                  {kendaraan.nama_kendaraan}
-                </MenuItem>
-              ))}
-            </Select>
-            {errors.id_kendaraan && (
-              <FormHelperText>{errors.id_kendaraan}</FormHelperText>
-            )}
-          </FormControl>
 
           {/* Dropdown Wisata */}
           <FormControl fullWidth margin="normal" error={!!errors.id_wisata}>

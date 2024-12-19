@@ -14,9 +14,6 @@ const FIELDS = [
   "Nama",
   "Tujuan",
   "Harga",
-  "Rumah Makan",
-  "Hotel",
-  "Kendaraan",
   "Aksi",
 ];
 
@@ -89,10 +86,7 @@ const PaketWisataPage = () => {
                 </td>
                 <td className="px-6 py-4">{item.nama_paket}</td>
                 <td className="px-6 py-4">{item.wisata.nama_wisata}</td>
-                <td className="px-6 py-4">{formatRupiah(item.harga)}</td>
-                <td className="px-6 py-4">{item.rumahmakan.nama_rm}</td>
-                <td className="px-6 py-4">{item.hotel.nama_hotel}</td>
-                <td className="px-6 py-4">{item.kendaraan.nama_kendaraan}</td>
+                <td className="px-6 py-4">{formatRupiah(item.harga)}</td>                
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-2">
                     <button className="text-blue-600 hover:text-blue-900">
