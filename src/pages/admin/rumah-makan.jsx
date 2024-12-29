@@ -12,10 +12,13 @@ import {
   DialogContent,
   DialogContentText,
   DialogActions,
+  Input,
 } from "@mui/material";
+import Image from "next/image";
 
 const FIELDS = [
   "No",
+  "",
   "Nama",
   "Harga/Pax",
   "Menu",
@@ -33,6 +36,7 @@ const initInput = {
   alamat: "",
   no_tlpn: "",
   jumlah_pax: 0,
+  gambar: null,
 };
 
 const RumahMakanPage = () => {
@@ -103,16 +107,38 @@ const RumahMakanPage = () => {
       return;
     }
 
+    if (formInput.gambar === null && formInput.id_rm === 0) {
+      setIsError("Harap pilih gambar");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("nama_rm", formInput.nama_rm);
+    formData.append("harga_pax", formInput.harga_pax);
+    formData.append("menu", formInput.menu);
+    formData.append("alamat", formInput.alamat);
+    formData.append("no_tlpn", formInput.no_tlpn);
+    formData.append("jumlah_pax", formInput.jumlah_pax);
+    if (formInput.gambar) {
+      formData.append("gambar", formInput.gambar);
+    }
+
     try {
       if (formInput.id_rm === 0) {
         // Add new data
-        await axiosInstance.post("/addRumahMakan", formInput);
+        await axiosInstance.post("/addRumahMakan", formData);
       } else {
-        // Update existing data
-        await axiosInstance.put(
-          `/editRumahMakan/${formInput.id_rm}`,
-          formInput
-        );
+        if (!formInput.gambar) {
+          await axiosInstance.put(
+            `/editRumahMakan/${formInput.id_rm}`,
+            formInput
+          );
+        } else {
+          await axiosInstance.put(
+            `/editRumahMakan/${formInput.id_rm}`,
+            formData
+          );
+        }
       }
       handleClose();
       fetchData();
@@ -142,6 +168,15 @@ const RumahMakanPage = () => {
             {data.map((item, index) => (
               <tr key={item.id_rm}>
                 <td className="px-6 py-4 whitespace-nowrap">{index + 1}</td>
+                <td className="px-6 py-4">
+                  <Image
+                    src={item?.gambar}
+                    alt={""}
+                    className="w-16 h-16 object-cover"
+                    width={100}
+                    height={100}
+                  />
+                </td>
                 <td className="px-6 py-4">{item.nama_rm}</td>
                 <td className="px-6 py-4">{item.harga_pax}</td>
                 <td className="px-6 py-4">{item.menu}</td>
@@ -235,6 +270,16 @@ const RumahMakanPage = () => {
               type="number"
               fullWidth
               margin="normal"
+            />
+            <Input
+              type="file"
+              name="gambar"
+              onChange={(e) => {
+                if (e.target.files[0]) {
+                  setFormInput({ ...formInput, gambar: e.target.files[0] });
+                }
+              }}
+              accept="image/*"
             />
             {isError && <p className="mt-2 text-sm text-red-500">{isError}</p>}
             <div className="mt-4 flex gap-2 justify-end">
